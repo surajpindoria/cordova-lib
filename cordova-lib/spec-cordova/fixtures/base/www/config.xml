@@ -11,4 +11,9 @@
     <access origin="*" />
     <preference name="fullscreen" value="true" />
     <preference name="webviewbounce" value="true" />
+
+    <platform name="android">
+        <splash src="./screen.png" density="land-hdpi"/>
+        <splash src="./screen.png" density="land-mdpi"/>
+    </platform>
 </widget>
