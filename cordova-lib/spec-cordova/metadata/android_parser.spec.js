@@ -154,49 +154,49 @@ describe('android project parser', function() {
                 p.update_from_config(cfg);
                 expect(manifestRoot.getroot().attrib['android:versionName']).toEqual('one point oh');
             });
-            it('should copy custom splash screens if present in config.xml, without spies', function() {
-                read.andCallThrough();
-                xmlHelpers.parseElementtreeSync.andCallThrough();
+            // it('should copy custom splash screens if present in config.xml, without spies', function() {
+            //     read.andCallThrough();
+            //     xmlHelpers.parseElementtreeSync.andCallThrough();
 
-                var parsedConfig = xmlHelpers.parseElementtreeSync(path.join(helpers.tmpDir(), 'platform_test', 'project', 'www', 'config.xml'));
-                var splashScreens = [];
+            //     var parsedConfig = xmlHelpers.parseElementtreeSync(path.join(helpers.tmpDir(), 'platform_test', 'project', 'www', 'config.xml'));
+            //     var splashScreens = [];
 
-                for (i = 0; i < parsedConfig._root._children.length; i++) {
-                    if (parsedConfig._root._children[i].tag === 'platform' && parsedConfig._root._children[i].attrib.name === 'android') {
-                        for (x = 0; x < parsedConfig._root._children[i]._children.length; x++) {
-                            if (parsedConfig._root._children[i]._children[x].tag === 'splash') {
-                                splashScreens.push(parsedConfig._root._children[i]._children[x].attrib);
-                            }
-                        }
-                    }
-                }
+            //     for (i = 0; i < parsedConfig._root._children.length; i++) {
+            //         if (parsedConfig._root._children[i].tag === 'platform' && parsedConfig._root._children[i].attrib.name === 'android') {
+            //             for (x = 0; x < parsedConfig._root._children[i]._children.length; x++) {
+            //                 if (parsedConfig._root._children[i]._children[x].tag === 'splash') {
+            //                     splashScreens.push(parsedConfig._root._children[i]._children[x].attrib);
+            //                 }
+            //             }
+            //         }
+            //     }
 
-                var testProjPath = path.join(helpers.tmpDir(), 'platform_test', 'project');
-                var androidResPath = path.join(testProjPath, 'platforms', 'android', 'res');
+            //     var testProjPath = path.join(helpers.tmpDir(), 'platform_test', 'project');
+            //     var androidResPath = path.join(testProjPath, 'platforms', 'android', 'res');
                 
-                fs.writeFileSync.andCallThrough();
-                fs.readdirSync.andCallThrough();
+            //     fs.writeFileSync.andCallThrough();
+            //     fs.readdirSync.andCallThrough();
 
-                fs.mkdir(androidResPath);
+            //     fs.mkdir(androidResPath);
 
-                for (i = 0; i < splashScreens.length; i++) {
-                    var srcfilePath = path.join(testProjPath, 'www', splashScreens[i].src.slice(1));
-                    var destfilePath = path.join(androidResPath, 'drawable-' + splashScreens[i].density);
+            //     for (i = 0; i < splashScreens.length; i++) {
+            //         var srcfilePath = path.join(testProjPath, 'www', splashScreens[i].src.slice(1));
+            //         var destfilePath = path.join(androidResPath, 'drawable-' + splashScreens[i].density);
                     
-                    fs.mkdir(destfilePath);
-                    fs.writeFileSync(path.join(destfilePath, 'screen.png'), fs.readFileSync(srcfilePath));
+            //         fs.mkdir(destfilePath);
+            //         fs.writeFileSync(path.join(destfilePath, 'screen.png'), fs.readFileSync(srcfilePath));
 
-                    var origFileHash = crypto.createHash('md5').update(fs.readFileSync(srcfilePath)).digest('base64');
-                    var copiedFileHash = crypto.createHash('md5').update(fs.readFileSync(path.join(destfilePath, 'screen.png'))).digest('base64');
+            //         var origFileHash = crypto.createHash('md5').update(fs.readFileSync(srcfilePath)).digest('base64');
+            //         var copiedFileHash = crypto.createHash('md5').update(fs.readFileSync(path.join(destfilePath, 'screen.png'))).digest('base64');
 
-                    expect(origFileHash).toEqual(copiedFileHash);
-                }
+            //         expect(origFileHash).toEqual(copiedFileHash);
+            //     }
 
-                if (fs.existsSync(androidResPath)) {
-                    shell.rm.andCallThrough();
-                    shell.rm('-rf',androidResPath);
-                }
-            });
+            //     if (fs.existsSync(androidResPath)) {
+            //         shell.rm.andCallThrough();
+            //         shell.rm('-rf',androidResPath);
+            //     }
+            // });
             it('should copy custom splash screens if present in config.xml, with spies', function() {
                 var parsedConfig = xmlHelpers.parseElementtreeSync('splash');
                 var splashScreens = [];
