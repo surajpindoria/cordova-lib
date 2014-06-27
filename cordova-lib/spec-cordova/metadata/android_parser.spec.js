@@ -44,6 +44,9 @@ var MANIFEST_XML = '<manifest android:versionCode="1" android:versionName="0.0.1
     '    </activity>\n' +
     '</application>\n' +
     '</manifest>\n';
+var SPLASH_XML = '<platform name="android">' + 
+    '   <splash src="./screen.png" density="land-hdpi"/>' + 
+    '</platform>';
 
 describe('android project parser', function() {
     var proj = path.join('some', 'path');
@@ -88,6 +91,7 @@ describe('android project parser', function() {
         var android_proj = path.join(proj, 'platforms', 'android');
         var stringsRoot;
         var manifestRoot;
+        var splashRoot;
         beforeEach(function() {
             stringsRoot = null;
             manifestRoot = null;
@@ -103,6 +107,8 @@ describe('android project parser', function() {
                     return stringsRoot = new et.ElementTree(et.XML(STRINGS_XML));
                 } else if (/AndroidManifest/.exec(path)) {
                     return manifestRoot = new et.ElementTree(et.XML(MANIFEST_XML));
+                } else if (path === 'splash') {
+                    return splashRoot = new et.ElementTree(et.XML(SPLASH_XML));
                 }
             });
         });
@@ -150,7 +156,7 @@ describe('android project parser', function() {
             });
             it('should copy custom splash screens if present in config.xml, without spies', function() {
                 read.andCallThrough();
-                xmlHelpers.parseElementtreeSync.andCallThrough('');
+                xmlHelpers.parseElementtreeSync.andCallThrough();
 
                 var parsedConfig = xmlHelpers.parseElementtreeSync(path.join(helpers.tmpDir(), 'platform_test', 'project', 'www', 'config.xml'));
                 var splashScreens = [];
@@ -192,46 +198,23 @@ describe('android project parser', function() {
                 }
             });
             it('should copy custom splash screens if present in config.xml, with spies', function() {
-                var parsedConfig = xmlHelpers.parseElementtreeSync(path.join(helpers.tmpDir(), 'platform_test', 'project', 'www', 'config.xml'));
-                spyOn(xmlHelpers, 'parseElementtreeSync').andReturn('<splash>');
-
+                var parsedConfig = xmlHelpers.parseElementtreeSync('splash');
                 var splashScreens = [];
 
                 for (i = 0; i < parsedConfig._root._children.length; i++) {
-                    if (parsedConfig._root._children[i].tag === 'platform' && parsedConfig._root._children[i].attrib.name === 'android') {
-                        for (x = 0; x < parsedConfig._root._children[i]._children.length; x++) {
-                            if (parsedConfig._root._children[i]._children[x].tag === 'splash') {
-                                splashScreens.push(parsedConfig._root._children[i]._children[x].attrib);
-                            }
+                    if (parsedConfig._root.tag === 'platform' && parsedConfig._root.attrib.name === 'android') {
+                        if (parsedConfig._root._children[i].tag === 'splash') {
+                            splashScreens.push(parsedConfig._root._children[i].attrib);
                         }
                     }
                 }
 
-                var testProjPath = path.join(helpers.tmpDir(), 'platform_test', 'project');
-                var androidResPath = path.join(testProjPath, 'platforms', 'android', 'res');
-                
-                fs.writeFileSync.andCallThrough();
-                fs.readdirSync.andCallThrough();
+                var androidResPath = path.join(android_proj, 'res');
+                var srcfilePath = splashScreens[0].src;
+                var destfilePath = path.join(androidResPath, 'drawable-' + splashScreens[0].density);
 
-                fs.mkdir(androidResPath);
-
-                for (i = 0; i < splashScreens.length; i++) {
-                    var srcfilePath = path.join(testProjPath, 'www', splashScreens[i].src.slice(1));
-                    var destfilePath = path.join(androidResPath, 'drawable-' + splashScreens[i].density);
-                    
-                    fs.mkdir(destfilePath);
-                    fs.writeFileSync(path.join(destfilePath, 'screen.png'), fs.readFileSync(srcfilePath));
-
-                    var origFileHash = crypto.createHash('md5').update(fs.readFileSync(srcfilePath)).digest('base64');
-                    var copiedFileHash = crypto.createHash('md5').update(fs.readFileSync(path.join(destfilePath, 'screen.png'))).digest('base64');
-
-                    expect(origFileHash).toEqual(copiedFileHash);
-                }
-
-                if (fs.existsSync(androidResPath)) {
-                    shell.rm.andCallThrough();
-                    shell.rm('-rf',androidResPath);
-                }
+                p.update_from_config(cfg);
+                expect(cp).toHaveBeenCalled();
             });
         });
         describe('www_dir method', function() {
