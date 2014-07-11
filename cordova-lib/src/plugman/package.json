@@ -1,0 +1,33 @@
+{
+    "author": "",
+    "name": "cordova-plugman",
+    "description": "",
+    "version": "",
+    "repository": {
+        "type": "git",
+        "url": ""
+    },
+    "bugs": {
+        "url": "",
+        "email": ""
+    },
+    "main": "plugman.js",
+    "engines": {
+        "node": ">=0.9.9"
+    },
+    "engineStrict": true,
+    "dependencies": {
+        "osenv": "0.0.x",
+        "semver": "2.0.x"
+    },
+    "devDependencies": {
+        "temp": "0.6.x",
+        "jshint": "2.5.x",
+        "jasmine-node": "~1"
+    },
+    "scripts": {
+        "test": "npm run jasmine && npm run jshint",
+        "jshint": "node node_modules/jshint/bin/jshint src",
+        "jasmine": "jasmine-node --captureExceptions --color spec-plugman spec-cordova"
+    }
+}
