@@ -24,14 +24,14 @@
 var shell   = require('shelljs'),
     fs      = require('fs'),
     url     = require('url'),
-    plugins = require('./util/plugins'),
-    xml_helpers = require('../util/xml-helpers'),
-    CordovaError  = require('../CordovaError'),
-    events = require('../events'),
-    metadata = require('./util/metadata'),
+    plugins = require('../util/plugins'),
+    xml_helpers = require('../../util/xml-helpers'),
+    CordovaError  = require('../../CordovaError'),
+    events = require('../../events'),
+    metadata = require('../util/metadata'),
     path    = require('path'),
     Q       = require('q'),
-    registry = require('./registry/registry');
+    registry = require('../registry/registry');
 // XXX: leave the require('./plugman') because jasmine shits itself if you declare it up top
 // possible options: link, subdir, git_ref, client, expected_id
 // Returns a promise.
