@@ -17,8 +17,7 @@
     },
     "engineStrict": true,
     "dependencies": {
-        "osenv": "0.0.x",
-        "semver": "2.0.x"
+        "osenv": "0.0.x"
     },
     "devDependencies": {
         "temp": "0.6.x",
