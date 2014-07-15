@@ -23,7 +23,7 @@
 
 var fs            = require('fs'),
     path          = require('path'),
-    util          = require('../util'),
+    util          = require('../project/util'),
     events        = require('../../events'),
     shell         = require('shelljs'),
     child_process = require('child_process'),
