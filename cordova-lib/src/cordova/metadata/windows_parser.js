@@ -31,8 +31,8 @@ var fs            = require('fs'),
     ConfigParser  = require('../../configparser/ConfigParser'),
     CordovaError  = require('../../CordovaError'),
     xml           = require('../../util/xml-helpers'),
-    lazy_load     = require('../lazy_load'),
-    hooker        = require('../hooker'),
+    lazy_load     = require('../misc/lazy_load'),
+    hooker        = require('../misc/hooker'),
     jsproj        = require('../../util/windows/jsproj');
 
 module.exports = function windows_parser(project) {
