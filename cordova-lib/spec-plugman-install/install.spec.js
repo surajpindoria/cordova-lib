@@ -33,10 +33,10 @@ var install = require('../src/plugman/install/install'),
     Q = require('q'),
     spec    = __dirname,
     done    = false,
-    srcProject = path.join(spec, 'projects', 'android_install'),
+    srcProject = path.join(spec, '..', 'fixtures-plugman', 'projects', 'android_install'),
     project = path.join(os.tmpdir(), 'plugman-test', 'android_install'),
 
-    plugins_dir = path.join(spec, 'plugins'),
+    plugins_dir = path.join(spec, '..', 'fixtures-plugman', 'plugins'),
     plugins_install_dir = path.join(project, 'cordova', 'plugins'),
     plugins = {
         'DummyPlugin' : path.join(plugins_dir, 'DummyPlugin'),
